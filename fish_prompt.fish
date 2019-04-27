@@ -3,15 +3,12 @@ function fish_prompt
   set -l last_status $status
 
   # Just calculate these once, to save a few cycles when displaying the prompt
-  if not set -q __fish_prompt_hostname
-    set -g __fish_prompt_hostname (hostname|cut -d . -f 1)
-  end
   if not set -q __fish_prompt_char
     switch (id -u)
       case 0
-        set -g __fish_prompt_char \u276f\u276f
+        set -g __fish_prompt_char '!'
       case '*'
-        set -g __fish_prompt_char »
+        set -g __fish_prompt_char '$'
     end
   end
 
@@ -27,6 +24,13 @@ function fish_prompt
   # Configure __fish_git_prompt
   set -g __fish_git_prompt_show_informative_status true
   set -g __fish_git_prompt_showcolorhints true
+  set -g __fish_git_prompt_char_upstream_ahead '+'
+  set -g __fish_git_prompt_char_upstream_behind '-'
+  set -g __fish_git_prompt_char_dirtystate '+'
+  set -g __fish_git_prompt_char_invalidstate '#'
+  set -g __fish_git_prompt_char_stagedstate '*'
+  set -g __fish_git_prompt_char_untrackedfiles '~'
+  set -g __fish_git_prompt_char_cleanstate '='
 
   # Color prompt char red for non-zero exit status
   set -l pcolor $bpurple
@@ -35,7 +39,7 @@ function fish_prompt
   end
 
   # Top
-  echo -n $cyan$USER$normal at $yellow$__fish_prompt_hostname$normal in $bred(prompt_pwd)$normal
+  echo -n $yellow(prompt_pwd)$normal
   __fish_git_prompt
 
   echo
